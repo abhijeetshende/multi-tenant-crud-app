@@ -29,11 +29,14 @@ api_blueprint = Blueprint('api', __name__)
     }
 })
 def create_item():
+    tenant_id = request.headers.get('X-Tenant-ID')
+    if not tenant_id:
+        return jsonify({"error": "Tenant ID is required"}), 400
     data = request.json
     if 'name' not in data:
         return jsonify({"error": "Name is required"}), 400
 
-    new_item = Item(name=data['name'])
+    new_item = Item(name=data['name'], tenant_id=tenant_id)
     db.session.add(new_item)
     
     try:
@@ -64,7 +67,10 @@ def create_item():
     }
 })
 def get_items():
-    items = Item.query.all()
+    tenant_id = request.headers.get('X-Tenant-ID')
+    if not tenant_id:
+        return jsonify({"error": "Tenant ID is required"}), 400
+    items = Item.query.filter_by(tenant_id=tenant_id).all()
     return jsonify([item.to_dict() for item in items])
 
 ### **3️⃣ Get a Single Item by ID (GET)**
