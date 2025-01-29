@@ -6,5 +6,6 @@ DB_NAME = "fastapi_db"
 DB_HOST = "localhost"
 DB_PORT = "5432"
 
-SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+# Get database URL from environment variable
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "postgresql://flaskuser:flaskpassword@localhost:5432/flaskdb")
 SQLALCHEMY_TRACK_MODIFICATIONS = False
