@@ -1,3 +1,3 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()  # Define a single SQLAlchemy instance
+db = SQLAlchemy()  # ✅ Ensure this is the only instance used across the app

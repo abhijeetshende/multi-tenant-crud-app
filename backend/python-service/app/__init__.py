@@ -3,9 +3,8 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI
+from app.database import db  # ✅ Import the db instance
 
-# Create a single SQLAlchemy instance
-db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
@@ -17,12 +16,12 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize database with the app
-    db.init_app(app)  # ✅ Important: This must be called
-
+    db.init_app(app)  # ✅ Initialize db properly
     migrate.init_app(app, db)
 
-    # Register Blueprints
-    from app.routes import api_blueprint
-    app.register_blueprint(api_blueprint)
+    # Register Blueprints within app context
+    with app.app_context():
+        from app.routes import api_blueprint
+        app.register_blueprint(api_blueprint)
 
     return app
