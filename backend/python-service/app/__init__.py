@@ -21,7 +21,10 @@ def create_app():
 
     # Register Blueprints within app context
     with app.app_context():
-        from app.routes import api_blueprint
+        from app.routes.items import api_blueprint
+        from app.routes.todos import todo_blueprint  # ✅ Import new todo blueprint
+
         app.register_blueprint(api_blueprint)
+        app.register_blueprint(todo_blueprint)
 
     return app
