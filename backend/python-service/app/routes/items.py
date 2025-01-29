@@ -1,11 +1,33 @@
 from flask import Blueprint, jsonify, request
 from app.database import db
 from app.models import Item
+from flasgger import swag_from
+
 
 api_blueprint = Blueprint('api', __name__)
 
 ### **1️⃣ Create a New Item (POST)**
 @api_blueprint.route('/items', methods=['POST'])
+@swag_from({
+    "tags": ["Items"],
+    "parameters": [
+        {
+            "name": "body",
+            "in": "body",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"}
+                },
+                "required": ["name"]
+            }
+        }
+    ],
+    "responses": {
+        201: {"description": "Item created successfully"},
+        400: {"description": "Invalid input"}
+    }
+})
 def create_item():
     data = request.json
     if 'name' not in data:
@@ -23,6 +45,24 @@ def create_item():
 
 ### **2️⃣ Get All Items (GET)**
 @api_blueprint.route('/items', methods=['GET'])
+@swag_from({
+    "tags": ["Items"],
+    "responses": {
+        200: {
+            "description": "List of all items",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "integer"},
+                        "name": {"type": "string"}
+                    }
+                }
+            }
+        }
+    }
+})
 def get_items():
     items = Item.query.all()
     return jsonify([item.to_dict() for item in items])

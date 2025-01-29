@@ -1,12 +1,35 @@
 from flask import Blueprint, jsonify, request
 from app.database import db
 from app.models import Todo
+from flasgger import swag_from
 
 
 todo_blueprint = Blueprint('todos', __name__)
 
 
 @todo_blueprint.route('/todos', methods=['POST'])
+@swag_from({
+    "tags": ["Todos"],
+    "parameters": [
+        {
+            "name": "body2",
+            "in": "body",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string"},
+                    "description": {"type": "string"},
+                    "is_completed": {"type": "boolean"}
+                },
+                "required": ["title"]
+            }
+        }
+    ],
+    "responses": {
+        201: {"description": "Todo created successfully"},
+        400: {"description": "Invalid input"}
+    }
+})
 def create_todo():
     data = request.json
     if 'title' not in data:

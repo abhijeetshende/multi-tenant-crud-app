@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import SQLALCHEMY_DATABASE_URI
 from app.database import db  # ✅ Import the db instance
+from flasgger import Swagger  # ✅ Import Flasgger
+
 
 migrate = Migrate()
 
@@ -18,6 +20,7 @@ def create_app():
     # Initialize database with the app
     db.init_app(app)  # ✅ Initialize db properly
     migrate.init_app(app, db)
+    Swagger(app)
 
     # Register Blueprints within app context
     with app.app_context():
