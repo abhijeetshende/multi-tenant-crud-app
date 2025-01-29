@@ -25,3 +25,8 @@ def create_todo():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+@todo_blueprint.route('/todos', methods=['GET'])
+def get_todos():
+    todos = Todo.query.all()
+    return jsonify([todo.to_dict() for todo in todos])
