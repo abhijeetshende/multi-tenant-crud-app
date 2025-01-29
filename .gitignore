@@ -1,0 +1,23 @@
+# Node.js & React
+node_modules/
+dist/
+.env
+.vscode/
+.DS_Store
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Go
+bin/
+*.exe
+*.out
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Kubernetes
+infra/.kube/
