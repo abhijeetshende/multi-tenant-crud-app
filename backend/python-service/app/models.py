@@ -1,4 +1,4 @@
-from app.database import db
+from app.database import db  # Ensure we use the same db instance
 
 class Item(db.Model):
     __tablename__ = 'items'
